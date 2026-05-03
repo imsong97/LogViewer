@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
-      <set>
-        <GradleProjectSettings>
-          <option name="externalProjectPath" value="$PROJECT_DIR$" />
-          <option name="gradleJvm" value="/Users/yunho/Library/Java/JavaVirtualMachines/jbr-17.0.12/Contents/Home" />
-        </GradleProjectSettings>
-      </set>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="#JAVA_HOME" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/composeApp" />
+          </set>
+        </option>
+      </GradleProjectSettings>
     </option>
   </component>
 </project>
-
