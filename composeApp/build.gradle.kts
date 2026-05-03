@@ -8,9 +8,7 @@ plugins {
 }
 
 kotlin {
-    jvm {
-        compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
-    }
+    jvm()
 
     sourceSets {
         commonMain.dependencies {
