@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: androidx.compose.runtime:runtime-retain-desktop:1.10.5" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="androidx.compose.runtime" artifactId="runtime-retain-desktop" version="1.10.5" baseVersion="1.10.5" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.compose.runtime/runtime-retain-desktop/1.10.5/879812e3cd2c6151f5d91f515a35952b1be07a76/runtime-retain-desktop-1.10.5.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.compose.runtime/runtime-retain-desktop/1.10.5/1107f097133bd10cf4764ddbd0cba16000f369b5/runtime-retain-desktop-1.10.5-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

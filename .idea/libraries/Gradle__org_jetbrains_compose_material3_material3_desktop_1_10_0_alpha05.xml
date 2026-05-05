@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: org.jetbrains.compose.material3:material3-desktop:1.10.0-alpha05" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.jetbrains.compose.material3" artifactId="material3-desktop" version="1.10.0-alpha05" baseVersion="1.10.0-alpha05" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.compose.material3/material3-desktop/1.10.0-alpha05/ebcf3065e9f7d408f8be2854b6542fb1dd51356f/material3-desktop-1.10.0-alpha05.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.compose.material3/material3-desktop/1.10.0-alpha05/2e94b9d51c1e701166cbf382a9d0ae69acbb0fe8/material3-desktop-1.10.0-alpha05-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

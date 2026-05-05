@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: androidx.compose.runtime:runtime-desktop:1.10.5" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="androidx.compose.runtime" artifactId="runtime-desktop" version="1.10.5" baseVersion="1.10.5" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.compose.runtime/runtime-desktop/1.10.5/b1705e2087f06395622b784aa88e2e738043459/runtime-desktop-1.10.5.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.compose.runtime/runtime-desktop/1.10.5/8df37f4308c93da9af4dc3a2e0d13a39781c302e/runtime-desktop-1.10.5-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

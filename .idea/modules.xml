@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/LogViewer.iml" filepath="$PROJECT_DIR$/.idea/modules/LogViewer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/composeApp/LogViewer.composeApp.iml" filepath="$PROJECT_DIR$/.idea/modules/composeApp/LogViewer.composeApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/composeApp/LogViewer.composeApp.commonMain.iml" filepath="$PROJECT_DIR$/.idea/modules/composeApp/LogViewer.composeApp.commonMain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/composeApp/LogViewer.composeApp.commonTest.iml" filepath="$PROJECT_DIR$/.idea/modules/composeApp/LogViewer.composeApp.commonTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/composeApp/LogViewer.composeApp.desktopDev.iml" filepath="$PROJECT_DIR$/.idea/modules/composeApp/LogViewer.composeApp.desktopDev.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/composeApp/LogViewer.composeApp.desktopMain.iml" filepath="$PROJECT_DIR$/.idea/modules/composeApp/LogViewer.composeApp.desktopMain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/composeApp/LogViewer.composeApp.desktopTest.iml" filepath="$PROJECT_DIR$/.idea/modules/composeApp/LogViewer.composeApp.desktopTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/shared/LogViewer.shared.iml" filepath="$PROJECT_DIR$/.idea/modules/shared/LogViewer.shared.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/shared/LogViewer.shared.commonMain.iml" filepath="$PROJECT_DIR$/.idea/modules/shared/LogViewer.shared.commonMain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/shared/LogViewer.shared.commonTest.iml" filepath="$PROJECT_DIR$/.idea/modules/shared/LogViewer.shared.commonTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/shared/LogViewer.shared.desktopMain.iml" filepath="$PROJECT_DIR$/.idea/modules/shared/LogViewer.shared.desktopMain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/shared/LogViewer.shared.desktopTest.iml" filepath="$PROJECT_DIR$/.idea/modules/shared/LogViewer.shared.desktopTest.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: org.jetbrains.compose.ui:ui-util-desktop:1.10.3" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.jetbrains.compose.ui" artifactId="ui-util-desktop" version="1.10.3" baseVersion="1.10.3" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.compose.ui/ui-util-desktop/1.10.3/fe41825dccacb792ded7df579736a0ed919ee270/ui-util-desktop-1.10.3.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.compose.ui/ui-util-desktop/1.10.3/695a0886560ee97987cff93c35b308b1aa64b434/ui-util-desktop-1.10.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

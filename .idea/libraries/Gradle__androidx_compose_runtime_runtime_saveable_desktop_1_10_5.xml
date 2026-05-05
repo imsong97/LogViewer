@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: androidx.compose.runtime:runtime-saveable-desktop:1.10.5" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="androidx.compose.runtime" artifactId="runtime-saveable-desktop" version="1.10.5" baseVersion="1.10.5" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.compose.runtime/runtime-saveable-desktop/1.10.5/f6903c683c07ba479659ba4eb55bc7c80a7c433e/runtime-saveable-desktop-1.10.5.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.compose.runtime/runtime-saveable-desktop/1.10.5/b214197d54477204d5ab386088cf195c21dcf12e/runtime-saveable-desktop-1.10.5-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

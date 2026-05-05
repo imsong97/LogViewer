@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: androidx.savedstate:savedstate-desktop:1.4.0" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="androidx.savedstate" artifactId="savedstate-desktop" version="1.4.0" baseVersion="1.4.0" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.savedstate/savedstate-desktop/1.4.0/3b049a0f81643d6b4b900de95bc23efc085c32d5/savedstate-desktop-1.4.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.savedstate/savedstate-desktop/1.4.0/c15b64985d183d53e31ca5becb8c5005b02b6f3a/savedstate-desktop-1.4.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

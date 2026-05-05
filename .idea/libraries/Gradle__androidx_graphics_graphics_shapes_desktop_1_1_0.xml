@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: androidx.graphics:graphics-shapes-desktop:1.1.0" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="androidx.graphics" artifactId="graphics-shapes-desktop" version="1.1.0" baseVersion="1.1.0" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.graphics/graphics-shapes-desktop/1.1.0/a5d2198960bdc0915f74c6b2954d3323f35f40ea/graphics-shapes-desktop-1.1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.graphics/graphics-shapes-desktop/1.1.0/874188df605b2c2c0283572fe914379915848b32/graphics-shapes-desktop-1.1.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
