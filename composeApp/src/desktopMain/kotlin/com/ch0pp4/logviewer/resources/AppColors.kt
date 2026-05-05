@@ -48,4 +48,8 @@ object AppColors {
     // delete button
     val deleteButtonText = Color(0xFFB71C1C)
 
+    // header
+    val logHeaderBackground = Color(0xFFF0F0F0)
+    val logHeaderText = Color(0xFF333333)
+    val logHeaderDivider = Color(0xFFCCCCCC)
 }
