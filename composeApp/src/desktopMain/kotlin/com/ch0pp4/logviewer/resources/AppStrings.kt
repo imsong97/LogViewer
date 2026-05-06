@@ -5,6 +5,7 @@ object AppStrings {
     const val APP_TITLE = "LogViewer"
 
     // drop box
+    const val DROPBOX_PLACEHOLDER_ICON = "📄"
     const val DROPBOX_PLACEHOLDER = ".txt / .log 파일을 이곳에 드래그 하세요"
     const val DROPBOX_UNSUPPORTED_FILE = ".txt / .log 파일만 지원합니다."
 
@@ -32,7 +33,7 @@ object AppStrings {
     const val FILE_LIST_LABEL = "파일: "
     const val FILE_REMOVE = "X"
     const val FILE_REMOVE_ALL = "전체 삭제"
-    const val FILE_ADD_BTN = "+ 추가"
+    const val FILE_ADD_BTN = "+ 추가" // "⚙ 설정"
 
     // header column
     const val HEADER_FILE = "File"

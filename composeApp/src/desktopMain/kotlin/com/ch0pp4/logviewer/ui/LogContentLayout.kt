@@ -164,7 +164,7 @@ fun LogContentLayout(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "", fontSize = 48.sp)
+                Text(text = AppStrings.DROPBOX_PLACEHOLDER_ICON, fontSize = 48.sp)
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(text = AppStrings.DROPBOX_PLACEHOLDER, style = MaterialTheme.typography.body1, color = Color.Gray)
             }
