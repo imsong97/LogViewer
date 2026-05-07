@@ -4,10 +4,17 @@ object AppStrings {
     // app title
     const val APP_TITLE = "LogViewer"
 
+    // common
+    const val COMMON_FILE_FORMAT_LOG = ".log"
+    const val COMMON_FILE_FORMAT_TXT = ".txt"
+    const val COMMON_UNSUPPORTED_FILE_MESSAGE = "$COMMON_FILE_FORMAT_TXT / $COMMON_FILE_FORMAT_LOG 파일만 지원합니다."
+    const val COMMON_LOG_LEVEL_D = "D"
+    const val COMMON_LOG_LEVEL_E = "E"
+    const val COMMON_LOG_LEVEL_W = "W"
+
     // drop box
     const val DROPBOX_PLACEHOLDER_ICON = "📄"
-    const val DROPBOX_PLACEHOLDER = ".txt / .log 파일을 이곳에 드래그 하세요"
-    const val DROPBOX_UNSUPPORTED_FILE = ".txt / .log 파일만 지원합니다."
+    const val DROPBOX_PLACEHOLDER = "$COMMON_FILE_FORMAT_TXT / $COMMON_FILE_FORMAT_LOG 파일을 이곳에 드래그 하세요"
 
     // search layout
     const val SEARCH_LABEL = "Search"
@@ -21,15 +28,11 @@ object AppStrings {
     const val FILTER_LOG_LEVEL = "LogLV"
     const val FILTER_LOG_LEVEL_RESET = "초기화"
 
-    const val LOG_LEVEL_D = "D"
-    const val LOG_LEVEL_E = "E"
-    const val LOG_LEVEL_W = "W"
-
     const val FILTER_BOOKMARK = "북마크만"
 
     const val HIDE_UNPARSED_LOGS = "파싱 불가 숨김"
 
-    // file flow layout
+    // file list layout
     const val FILE_LIST_LABEL = "파일: "
     const val FILE_REMOVE = "X"
     const val FILE_REMOVE_ALL = "전체 삭제"
@@ -43,4 +46,8 @@ object AppStrings {
     const val HEADER_THREAD = "Thread"
     const val HEADER_TAG = "Tag"
     const val HEADER_DESCRIPTION = "Description"
+
+    // file browser
+    const val FILE_BROWSER_TITLE = "파일 선택"
+    const val FILE_BROWSER_NOT_SUPPORTED_TITLE = "지원하지 않는 파일 형식"
 }

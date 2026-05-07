@@ -124,7 +124,7 @@ fun LogContentLayout(
             .dragAndDropTarget(shouldStartDragAndDrop = { true }, target = dragAndDropTarget)
             .then(
                 if (isDraggingOver) {
-                    Modifier.border(2.dp, AppColors.dropBorderActive).background(AppColors.dropBorderActive)
+                    Modifier.border(2.dp, AppColors.dropBorderActive).background(AppColors.dropBoxBackgroundActive)
                 } else {
                     Modifier.border(1.dp, AppColors.dropBoxBorderIdle)
                 }
@@ -259,10 +259,7 @@ private fun LogRow(
 ) {
     val textColor = logLVColor(logLine.logLv)
     val hasBorder = isFocused || isSelected
-    val bgColor = when {
-        isBookmarked -> AppColors.bookMarkBackground
-        else -> Color.Transparent
-    }
+    val bgColor = if (isBookmarked) AppColors.bookMarkBackground else Color.Transparent
 
     Row(
         modifier = Modifier.fillMaxWidth()
@@ -385,8 +382,8 @@ private val HEADER_COLUMNS = listOf(
 )
 
 private fun logLVColor(level: String?): Color = when (level) {
-    "E" -> AppColors.logLevelError
-    "W" -> AppColors.logLevelWarning
-    "D" -> AppColors.logLevelDebug
+    AppStrings.COMMON_LOG_LEVEL_E -> AppColors.logLevelError
+    AppStrings.COMMON_LOG_LEVEL_W -> AppColors.logLevelWarning
+    AppStrings.COMMON_LOG_LEVEL_D -> AppColors.logLevelDebug
     else -> Color.Unspecified
 }
