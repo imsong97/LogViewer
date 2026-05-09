@@ -26,3 +26,7 @@
 
 <img width="1169" height="750" alt="필터링 기능" src="https://github.com/user-attachments/assets/fd62168d-ebe7-461b-be3a-a8834345e376" />
 
+---
+## 📝 라이선스
+
+MIT License - 자유롭게 사용, 수정, 배포 가능합니다.
