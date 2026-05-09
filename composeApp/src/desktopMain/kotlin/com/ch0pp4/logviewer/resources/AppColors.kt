@@ -52,4 +52,10 @@ object AppColors {
     val logHeaderBackground = Color(0xFFF0F0F0)
     val logHeaderText = Color(0xFF333333)
     val logHeaderDivider = Color(0xFFCCCCCC)
+
+    // delete dialog
+    val deleteDialogButtonCancel = Color(0xFF686868)
+    val deleteDialogButtonCancelBackground = Color(0xFF9E9E9E)
+    val deleteDialogButtonDelete = Color.White
+    val deleteDialogButtonDeleteBackground = Color(0xFFEE3636)
 }

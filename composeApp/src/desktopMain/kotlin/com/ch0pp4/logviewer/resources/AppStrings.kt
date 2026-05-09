@@ -11,6 +11,7 @@ object AppStrings {
     const val COMMON_LOG_LEVEL_D = "D"
     const val COMMON_LOG_LEVEL_E = "E"
     const val COMMON_LOG_LEVEL_W = "W"
+    const val COMMON_DIALOG_BTN_CANCEL = "취소"
 
     // drop box
     const val DROPBOX_PLACEHOLDER_ICON = "📄"
@@ -37,6 +38,8 @@ object AppStrings {
     const val FILE_REMOVE = "X"
     const val FILE_REMOVE_ALL = "전체 삭제"
     const val FILE_ADD_BTN = "+ 추가" // "⚙ 설정"
+    const val FILE_REMOVE_DIALOG_MESSAGE = "로드된 파일 %d개를 모두 삭제하시겠습니까?"
+    const val FILE_REMOVE_DIALOG_BTN_DELETE = "삭제"
 
     // header column
     const val HEADER_FILE = "File"
@@ -50,4 +53,8 @@ object AppStrings {
     // file browser
     const val FILE_BROWSER_TITLE = "파일 선택"
     const val FILE_BROWSER_NOT_SUPPORTED_TITLE = "지원하지 않는 파일 형식"
+
+    // menuBar
+    const val MENU_SETTING_TITLE = "설정"
+    const val MENU_ITEM_USER_SETTINGS = "사용자 설정"
 }

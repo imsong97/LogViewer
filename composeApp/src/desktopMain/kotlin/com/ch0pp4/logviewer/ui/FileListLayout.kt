@@ -1,5 +1,6 @@
 package com.ch0pp4.logviewer.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -9,9 +10,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults.buttonColors
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,9 +29,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ch0pp4.logviewer.resources.AppColors
 import com.ch0pp4.logviewer.resources.AppStrings
+import kotlinx.coroutines.launch
+import java.awt.FileDialog
 import java.io.File
-import javax.swing.JFileChooser
-import javax.swing.filechooser.FileNameExtensionFilter
+import java.io.FilenameFilter
+import javax.swing.JFrame
+import javax.swing.JOptionPane
+import javax.swing.SwingUtilities
 
 @Composable
 fun FileListLayout(
@@ -30,6 +44,115 @@ fun FileListLayout(
     onRemoveFile: (String) -> Unit,
     clearAll: () -> Unit
 ) {
+    val scope = rememberCoroutineScope()
+    var showClearConfirm by remember { mutableStateOf(false) }
+
+    if (showClearConfirm) {
+        AlertDialog(
+            onDismissRequest = {},
+
+            title = {
+                Text(
+                    text = AppStrings.FILE_REMOVE_ALL,
+                    color = AppColors.textFieldText
+                )
+            },
+
+            text = {
+                Text(
+                    text = AppStrings.FILE_REMOVE_DIALOG_MESSAGE.format(loadedFiles.size),
+                    color = AppColors.textFieldText
+                )
+            },
+
+            confirmButton = {
+                Button(
+                    onClick = {
+                        clearAll()
+                        showClearConfirm = false
+                    },
+                    colors = buttonColors(
+                        containerColor = AppColors.deleteDialogButtonDeleteBackground
+                    )
+                ) {
+                    Text(
+                        text = AppStrings.FILE_REMOVE_DIALOG_BTN_DELETE,
+                        color = AppColors.deleteDialogButtonDelete
+                    )
+                }
+            },
+
+            dismissButton = {
+                OutlinedButton(
+                    onClick = { showClearConfirm = false },
+                    border = BorderStroke(
+                        width = 1.dp,
+                        color = AppColors.deleteDialogButtonCancelBackground
+                    ),
+                ) {
+                    Text(
+                        text = AppStrings.COMMON_DIALOG_BTN_CANCEL,
+                        color = AppColors.deleteDialogButtonCancel
+                    )
+                }
+            },
+
+            containerColor = Color.White,
+        )
+    }
+
+    fun openFileDialog() {
+        SwingUtilities.invokeLater {
+            val owner = JFrame().apply {
+                this.isUndecorated = true
+                this.isVisible = true
+                toFront()
+            }
+
+            val dialog = object : FileDialog(owner, AppStrings.FILE_BROWSER_TITLE, FileDialog.LOAD) {
+
+                override fun setVisible(value: Boolean) {
+                    this.isMultipleMode = true
+
+                    this.filenameFilter = FilenameFilter { _, name ->
+                        name.endsWith(suffix = AppStrings.COMMON_FILE_FORMAT_LOG) ||
+                                name.endsWith(suffix = AppStrings.COMMON_FILE_FORMAT_TXT)
+                    }
+
+                    super.setVisible(value)
+                }
+            }
+
+            dialog.isVisible = true
+
+            val allSelected = dialog.files?.toList() ?: emptyList()
+
+            val selected = allSelected.filter {
+                it.name.endsWith(suffix = AppStrings.COMMON_FILE_FORMAT_LOG) ||
+                        it.name.endsWith(suffix = AppStrings.COMMON_FILE_FORMAT_TXT)
+            }
+
+            dialog.dispose()
+            owner.dispose()
+
+            if (allSelected.isNotEmpty() && selected.isEmpty()) {
+                JOptionPane.showMessageDialog(
+                    null,
+                    AppStrings.COMMON_UNSUPPORTED_FILE_MESSAGE,
+                    AppStrings.FILE_BROWSER_NOT_SUPPORTED_TITLE,
+                    JOptionPane.WARNING_MESSAGE
+                )
+                return@invokeLater
+            }
+
+            if (selected.isNotEmpty()) {
+                scope.launch {
+                    onLoadFiles(selected)
+                }
+            }
+        }
+    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -70,22 +193,7 @@ fun FileListLayout(
 
         // add btn
         TextButton(
-            onClick = {
-                JFileChooser().apply {
-                    isMultiSelectionEnabled = true
-                    fileSelectionMode = JFileChooser.FILES_ONLY
-                    addChoosableFileFilter(
-                        FileNameExtensionFilter("Files", "log", "txt")
-                    )
-                }.also { chooser ->
-                    if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-                        val selectedFiles = chooser.selectedFiles.toList()
-                        if (selectedFiles.isNotEmpty()) {
-                            onLoadFiles(selectedFiles)
-                        }
-                    }
-                }
-            },
+            onClick = { openFileDialog() },
             modifier = Modifier.padding(all = 0.dp)
         ) {
             Text(text = AppStrings.FILE_ADD_BTN, fontSize = 11.sp, color = AppColors.fileTagText)
@@ -93,7 +201,13 @@ fun FileListLayout(
 
         // delete btn
         TextButton(
-            onClick = { clearAll() },
+            onClick = {
+                if (loadedFiles.size >= 2) {
+                    showClearConfirm = true
+                } else {
+                    clearAll()
+                }
+            },
             enabled = loadedFiles.isNotEmpty(),
             modifier = Modifier.padding(all = 0.dp)
         ) {

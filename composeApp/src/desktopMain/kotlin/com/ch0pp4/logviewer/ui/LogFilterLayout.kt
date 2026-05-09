@@ -174,7 +174,7 @@ fun LogFilterLayout(
                 onClick = onToggleBookmarks,
                 label = { Text(text = AppStrings.FILTER_BOOKMARK, fontSize = 12.sp) },
                 colors = FilterChipDefaults.filterChipColors(
-                    selectedContainerColor = AppColors.bookMarkBackground,
+                    selectedContainerColor = AppColors.chipBookMarkBackground,
                     selectedLabelColor = AppColors.chipBookMarkText,
                 )
             )
