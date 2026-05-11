@@ -50,6 +50,10 @@ class LogViewModel(
     private val _selectedLines = MutableStateFlow<Set<Int>>(emptySet())
     val selectedLines: StateFlow<Set<Int>> = _selectedLines.asStateFlow()
 
+    // unsupported file dialog
+    private val _showUnSupportedDialog = MutableStateFlow(false)
+    val showUnSupportedDialog: StateFlow<Boolean> = _showUnSupportedDialog.asStateFlow()
+
     private val _showOnlyBookmarks = MutableStateFlow(false)
     val showOnlyBookmarks: StateFlow<Boolean> = _showOnlyBookmarks.asStateFlow()
 
@@ -108,8 +112,7 @@ class LogViewModel(
         val supportedFiles = files.filter { logFileProvider.isSupported(it) }
 
         if (supportedFiles.isEmpty()) {
-            _parsedLines.value = listOf(LogLine(index = 0, text = AppStrings.COMMON_UNSUPPORTED_FILE_MESSAGE, fileName = ""))
-            _existFile.value = true
+            _showUnSupportedDialog.value = true
             return
         }
 
@@ -145,6 +148,10 @@ class LogViewModel(
             if (elapsed < 500L) delay(500L - elapsed)
             _isLoading.value = false
         }
+    }
+
+    fun dismissUnsupportedDialog() {
+        _showUnSupportedDialog.value = false
     }
 
     fun removeFile(fileName: String) {

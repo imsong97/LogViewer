@@ -62,7 +62,7 @@ fun main() = application {
         val displayLines by logViewModel.displayLines.collectAsState(initial = emptyList())
         val loadedFiles by logViewModel.loadedFiles.collectAsState()
         val isLoading by logViewModel.isLoading.collectAsState()
-        var showSettings by remember { mutableStateOf(value = false) }
+        val showUnsupportedDialog by logViewModel.showUnSupportedDialog.collectAsState()
 
         MaterialTheme {
             Box(
@@ -91,8 +91,10 @@ fun main() = application {
 
                     FileListLayout(
                         loadedFiles = loadedFiles,
+                        showUnSupportedDialog = showUnsupportedDialog,
                         onLoadFiles = { files -> logViewModel.loadFiles(files) },
                         onRemoveFile = { fileName -> logViewModel.removeFile(fileName) },
+                        onDismissUnsupportedDialog = { logViewModel.dismissUnsupportedDialog() },
                         clearAll = { logViewModel.clearAll() },
                     )
 

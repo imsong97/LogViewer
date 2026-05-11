@@ -12,6 +12,7 @@ object AppStrings {
     const val COMMON_LOG_LEVEL_E = "E"
     const val COMMON_LOG_LEVEL_W = "W"
     const val COMMON_DIALOG_BTN_CANCEL = "취소"
+    const val COMMON_DIALOG_BTN_CONFIRM = "확인"
 
     // drop box
     const val DROPBOX_PLACEHOLDER_ICON = "📄"

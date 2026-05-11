@@ -29,28 +29,49 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ch0pp4.logviewer.resources.AppColors
 import com.ch0pp4.logviewer.resources.AppStrings
-import kotlinx.coroutines.launch
 import java.awt.FileDialog
 import java.io.File
 import java.io.FilenameFilter
 import javax.swing.JFrame
-import javax.swing.JOptionPane
 import javax.swing.SwingUtilities
 
 @Composable
 fun FileListLayout(
     loadedFiles: List<String>,
+    showUnSupportedDialog: Boolean = false,
     onLoadFiles: (List<File>) -> Unit,
     onRemoveFile: (String) -> Unit,
+    onDismissUnsupportedDialog: () -> Unit = {},
     clearAll: () -> Unit
 ) {
-    val scope = rememberCoroutineScope()
     var showClearConfirm by remember { mutableStateOf(false) }
+
+    if (showUnSupportedDialog) {
+        AlertDialog(
+            onDismissRequest = {},
+            title = {},
+            text = {},
+            confirmButton = {
+                Button(
+                    onClick = { onDismissUnsupportedDialog() },
+                    colors = buttonColors(containerColor = AppColors.deleteDialogButtonDeleteBackground)
+                ) {
+                    Text(text = AppStrings.COMMON_DIALOG_BTN_CONFIRM, color = AppColors.deleteDialogButtonDelete)
+                }
+            },
+            containerColor = Color.White
+        )
+//        JOptionPane.showMessageDialog(
+//            null,
+//            AppStrings.COMMON_UNSUPPORTED_FILE_MESSAGE,
+//            AppStrings.FILE_BROWSER_NOT_SUPPORTED_TITLE,
+//            JOptionPane.WARNING_MESSAGE
+//        )
+    }
 
     if (showClearConfirm) {
         AlertDialog(
             onDismissRequest = {},
-
             title = {
                 Text(
                     text = AppStrings.FILE_REMOVE_ALL,
@@ -106,49 +127,29 @@ fun FileListLayout(
             val owner = JFrame().apply {
                 this.isUndecorated = true
                 this.isVisible = true
-                toFront()
+                this.toFront()
             }
 
             val dialog = object : FileDialog(owner, AppStrings.FILE_BROWSER_TITLE, FileDialog.LOAD) {
-
                 override fun setVisible(value: Boolean) {
                     this.isMultipleMode = true
-
                     this.filenameFilter = FilenameFilter { _, name ->
                         name.endsWith(suffix = AppStrings.COMMON_FILE_FORMAT_LOG) ||
                                 name.endsWith(suffix = AppStrings.COMMON_FILE_FORMAT_TXT)
                     }
-
                     super.setVisible(value)
                 }
             }
 
             dialog.isVisible = true
 
-            val allSelected = dialog.files?.toList() ?: emptyList()
-
-            val selected = allSelected.filter {
-                it.name.endsWith(suffix = AppStrings.COMMON_FILE_FORMAT_LOG) ||
-                        it.name.endsWith(suffix = AppStrings.COMMON_FILE_FORMAT_TXT)
-            }
+            val selected = dialog.files?.toList() ?: emptyList()
 
             dialog.dispose()
             owner.dispose()
 
-            if (allSelected.isNotEmpty() && selected.isEmpty()) {
-                JOptionPane.showMessageDialog(
-                    null,
-                    AppStrings.COMMON_UNSUPPORTED_FILE_MESSAGE,
-                    AppStrings.FILE_BROWSER_NOT_SUPPORTED_TITLE,
-                    JOptionPane.WARNING_MESSAGE
-                )
-                return@invokeLater
-            }
-
             if (selected.isNotEmpty()) {
-                scope.launch {
-                    onLoadFiles(selected)
-                }
+                onLoadFiles(selected)
             }
         }
     }
