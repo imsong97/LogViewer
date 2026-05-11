@@ -1,4 +1,4 @@
-package com.logviewer.data
+package com.logviewer.data.provider
 
 import com.logviewer.data.model.LogLine
 import java.io.File

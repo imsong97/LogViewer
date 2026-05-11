@@ -72,52 +72,27 @@ fun FileListLayout(
     if (showClearConfirm) {
         AlertDialog(
             onDismissRequest = {},
-            title = {
-                Text(
-                    text = AppStrings.FILE_REMOVE_ALL,
-                    color = AppColors.textFieldText
-                )
-            },
-
-            text = {
-                Text(
-                    text = AppStrings.FILE_REMOVE_DIALOG_MESSAGE.format(loadedFiles.size),
-                    color = AppColors.textFieldText
-                )
-            },
-
+            title = { Text(text = AppStrings.FILE_REMOVE_ALL, color = AppColors.textFieldText) },
+            text = { Text(text = AppStrings.FILE_REMOVE_DIALOG_MESSAGE.format(loadedFiles.size), color = AppColors.textFieldText) },
             confirmButton = {
                 Button(
                     onClick = {
                         clearAll()
                         showClearConfirm = false
                     },
-                    colors = buttonColors(
-                        containerColor = AppColors.deleteDialogButtonDeleteBackground
-                    )
+                    colors = buttonColors(containerColor = AppColors.deleteDialogButtonDeleteBackground)
                 ) {
-                    Text(
-                        text = AppStrings.FILE_REMOVE_DIALOG_BTN_DELETE,
-                        color = AppColors.deleteDialogButtonDelete
-                    )
+                    Text(text = AppStrings.FILE_REMOVE_DIALOG_BTN_DELETE, color = AppColors.deleteDialogButtonDelete)
                 }
             },
-
             dismissButton = {
                 OutlinedButton(
                     onClick = { showClearConfirm = false },
-                    border = BorderStroke(
-                        width = 1.dp,
-                        color = AppColors.deleteDialogButtonCancelBackground
-                    ),
+                    border = BorderStroke(width = 1.dp, color = AppColors.deleteDialogButtonCancelBackground),
                 ) {
-                    Text(
-                        text = AppStrings.COMMON_DIALOG_BTN_CANCEL,
-                        color = AppColors.deleteDialogButtonCancel
-                    )
+                    Text(text = AppStrings.COMMON_DIALOG_BTN_CANCEL, color = AppColors.deleteDialogButtonCancel)
                 }
             },
-
             containerColor = Color.White,
         )
     }

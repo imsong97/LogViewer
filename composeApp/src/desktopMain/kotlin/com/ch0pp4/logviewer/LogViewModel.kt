@@ -6,7 +6,6 @@ import com.ch0pp4.logviewer.model.LoadResult
 import com.ch0pp4.logviewer.model.LogLine
 import com.ch0pp4.logviewer.model.RemoveResult
 import com.ch0pp4.logviewer.model.toPresentation
-import com.ch0pp4.logviewer.resources.AppStrings
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -23,7 +22,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.yield
 import kotlinx.coroutines.FlowPreview
 import java.io.File
-import com.logviewer.data.LogFileProvider
+import com.logviewer.data.provider.LogFileProvider
 import kotlin.collections.emptyList
 
 @OptIn(FlowPreview::class)
