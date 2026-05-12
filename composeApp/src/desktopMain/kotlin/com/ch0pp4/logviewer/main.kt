@@ -20,16 +20,17 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import androidx.lifecycle.ViewModelStore
+import com.ch0pp4.logviewer.di.AppContainer
 import com.ch0pp4.logviewer.resources.AppStrings
 import com.ch0pp4.logviewer.ui.FileListLayout
 import com.ch0pp4.logviewer.ui.LogContentLayout
 import com.ch0pp4.logviewer.ui.LogFilterLayout
-import com.ch0pp4.logviewer.utils.VMProvider
 import com.logviewer.data.provider.LogFileProviderImpl
 
 fun main() = application {
     val windowState = rememberWindowState(size = DpSize(width = 1400.dp, height = 900.dp))
     val viewModelStore = remember { ViewModelStore() }
+    val appContainer = remember { AppContainer() }
 
     Window(
         onCloseRequest = {
@@ -39,11 +40,8 @@ fun main() = application {
         title = AppStrings.APP_TITLE,
         state = windowState,
     ) {
-        val logViewModel: LogViewModel = remember(key1 = viewModelStore) {
-            VMProvider(
-                store = viewModelStore,
-                instance = LogViewModel(LogFileProviderImpl())
-            )
+        val logViewModel: LogViewModel = remember(key1 = viewModelStore, appContainer) {
+            appContainer.getLogViewModel(viewModelStore)
         }
 
         val showOnlyBookmarks by logViewModel.showOnlyBookmarks.collectAsState()
