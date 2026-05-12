@@ -23,6 +23,9 @@ import kotlinx.coroutines.yield
 import kotlinx.coroutines.FlowPreview
 import java.io.File
 import com.logviewer.data.provider.LogFileProvider
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlin.collections.emptyList
 
 @OptIn(FlowPreview::class)
@@ -122,8 +125,16 @@ class LogViewModel(
 
             val result = withContext(Dispatchers.Default) {
                 val currentMap = LinkedHashMap(_fileLineMap.value)
-                supportedFiles.forEach { file ->
-                    currentMap[file.name] = logFileProvider.readLines(file)
+                val loadedEntries = coroutineScope {
+                    supportedFiles.map { file ->
+                        async {
+                            file.name to logFileProvider.readLines(file)
+                        }
+                    }.awaitAll()
+                }
+
+                loadedEntries.forEach { (fileName, lines) ->
+                    currentMap[fileName] = lines
                 }
 
                 val mergedLines = logFileProvider.mergeAndSort(currentMap)
