@@ -1,0 +1,45 @@
+# Local configuration file (must not be committed)
+local.properties
+
+# Gradle files
+.gradle/
+build/
+*.apk
+*.aab
+*.ap_
+
+# Android Studio files
+.idea/
+*.iml
+*.iws
+*.ipr
+.DS_Store
+
+# Build outputs
+bin/
+out/
+target/
+
+# IntelliJ IDEA
+*.iws
+*.iml
+*.ipr
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Kotlin
+.kotlin/
+
+# Maven
+.m2/
+
+# Compose
+composeApp/build/
+shared/build/
+
