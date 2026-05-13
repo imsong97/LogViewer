@@ -2,6 +2,7 @@ package com.ch0pp4.logviewer
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ch0pp4.logviewer.model.BuildInfo
 import com.ch0pp4.logviewer.model.LoadResult
 import com.ch0pp4.logviewer.model.LogLine
 import com.ch0pp4.logviewer.model.RemoveResult
@@ -47,6 +48,10 @@ class LogViewModel(
 
     private val _focusedLine = MutableStateFlow<Int?>(null)
     val focusedLine: StateFlow<Int?> = _focusedLine.asStateFlow()
+
+    // build info
+    private val _buildInfo = MutableStateFlow(BuildInfo.EMPTY)
+    val buildInfo: StateFlow<BuildInfo> = _buildInfo.asStateFlow()
 
     // for Ctrl+Click
     private val _selectedLines = MutableStateFlow<Set<Int>>(emptySet())
@@ -138,16 +143,23 @@ class LogViewModel(
                 }
 
                 val mergedLines = logFileProvider.mergeAndSort(currentMap)
-                val parsed = logFileProvider.parseLines(mergedLines).map { it.toPresentation() }
+                val parseResult = logFileProvider.parseLines(mergedLines)
+                val parsedLines = parseResult.lines.map { it.toPresentation() }
+                val buildInfo = parseResult.buildInfo.toPresentation()
 
-                LoadResult(currentMap, parsed, !_existFile.value)
+                Pair(
+                    LoadResult(currentMap, parsedLines, !_existFile.value),
+                    buildInfo
+                )
+
             }
 
-            _fileLineMap.value = result.fileMap
-            _loadedFiles.value = result.fileMap.keys.toList()
-            _parsedLines.value = result.lines
+            _fileLineMap.value = result.first.fileMap
+            _loadedFiles.value = result.first.fileMap.keys.toList()
+            _parsedLines.value = result.first.lines
+            _buildInfo.value = result.second
 
-            if (result.isFirstLoad) {
+            if (result.first.isFirstLoad) {
                 _bookmarkedLines.value = emptySet()
                 _focusedLine.value = null
             }
@@ -179,14 +191,21 @@ class LogViewModel(
             } else {
                 val removeResult = withContext(Dispatchers.Default) {
                     val merged = logFileProvider.mergeAndSort(currentMap)
-                    val parsed = logFileProvider.parseLines(merged).map { it.toPresentation() }
+                    val parseResult = logFileProvider.parseLines(merged)
+                    val parsedLines = parseResult.lines.map { it.toPresentation() }
+                    val buildInfo = parseResult.buildInfo.toPresentation()
 
-                    RemoveResult(currentMap, parsed)
+                    Pair(
+                        RemoveResult(currentMap, parsedLines),
+                        buildInfo
+                    )
+
                 }
 
-                _fileLineMap.value = removeResult.fileMap
-                _loadedFiles.value = removeResult.fileMap.keys.toList()
-                _parsedLines.value = removeResult.lines
+                _fileLineMap.value = removeResult.first.fileMap
+                _loadedFiles.value = removeResult.first.fileMap.keys.toList()
+                _parsedLines.value = removeResult.first.lines
+                _buildInfo.value = removeResult.second
                 _bookmarkedLines.value = emptySet()
                 _focusedLine.value = null
                 _existFile.value = true
@@ -265,5 +284,6 @@ class LogViewModel(
         _tagSearchEnabled.value = true
         _loadedFiles.value = emptyList()
         _fileLineMap.value = LinkedHashMap()
+        _buildInfo.value = BuildInfo.EMPTY
     }
 }

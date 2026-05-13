@@ -56,10 +56,13 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ch0pp4.logviewer.model.BuildInfo
 import com.ch0pp4.logviewer.model.ColumnDef
 import com.ch0pp4.logviewer.model.LogLine
 import com.ch0pp4.logviewer.resources.AppColors
 import com.ch0pp4.logviewer.resources.AppStrings
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
 import java.io.File
@@ -75,6 +78,7 @@ fun LogContentLayout(
     bookmarkedLines: Set<Int> = emptySet(),
     focusedLine: Int? = null,
     selectedLines: Set<Int> = emptySet(),
+    buildInfo: BuildInfo = BuildInfo.EMPTY,
     onFileDropped: (List<File>) -> Unit = {},
     onToggleBookmark: (Int) -> Unit = {},
     onFocusLine: (Int) -> Unit = {},
@@ -175,6 +179,11 @@ fun LogContentLayout(
                         .padding(start = 8.dp, top = 4.dp, bottom = 4.dp)
                         .padding(end = 20.dp)
                 ) {
+                    // build info
+                    if (buildInfo.hasAnyValues) {
+                        BuildInfoRow(buildInfo)
+                    }
+
                     // header
                     HeaderRow()
 
@@ -266,20 +275,24 @@ private fun LogRow(
             .background(bgColor)
             .then(if (hasBorder) Modifier.border(1.dp, AppColors.lineFocusBorder) else Modifier)
             .pointerInput(logLine.index) {
-                detectTapGestures(
-                    onTap = { onTap() },
-                    onDoubleTap = { onDoubleTap() }
-                )
-            }
-            .pointerInput(logLine.index) {
-                awaitPointerEventScope {
-                    while (true) {
-                        val event = awaitPointerEvent()
-                        if (event.type == PointerEventType.Press && event.keyboardModifiers.isCtrlPressed) {
-                            event.changes.forEach {
-                                it.consume()
+                coroutineScope {
+                    launch {
+                        detectTapGestures(
+                            onTap = { onTap() },
+                            onDoubleTap = { onDoubleTap() }
+                        )
+                    }
+                    launch {
+                        awaitPointerEventScope {
+                            while (true) {
+                                val event = awaitPointerEvent()
+                                if (event.type == PointerEventType.Press && event.keyboardModifiers.isCtrlPressed) {
+                                    event.changes.forEach {
+                                        it.consume()
+                                    }
+                                    onCtrlTap()
+                                }
                             }
-                            onCtrlTap()
                         }
                     }
                 }
@@ -336,6 +349,34 @@ private fun LogRow(
             )
         }
     }
+}
+
+@Composable
+fun BuildInfoRow(buildInfo: BuildInfo) {
+    val values = listOf(
+        "Branch" to buildInfo.branch,
+        "STEP" to buildInfo.step,
+        "SW_Version" to buildInfo.swVersion,
+    ).filter {
+        it.second.isNotBlank()
+    }
+
+    Row(
+        modifier = Modifier.fillMaxWidth()
+            .background(AppColors.logHeaderBackground)
+            .padding(vertical = 4.dp),
+    ) {
+        Text(
+            text = values.joinToString("   |   ") { "${it.first} : ${it.second}" },
+            modifier = Modifier.padding(horizontal = 4.dp),
+            fontFamily = FontFamily.Monospace,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Bold,
+            color = AppColors.logHeaderText,
+            maxLines = 1
+        )
+    }
+    Divider(color = AppColors.logHeaderDivider, thickness = 1.dp)
 }
 
 @Composable

@@ -59,6 +59,7 @@ fun main() = application {
         val loadedFiles by logViewModel.loadedFiles.collectAsState()
         val isLoading by logViewModel.isLoading.collectAsState()
         val showUnsupportedDialog by logViewModel.showUnSupportedDialog.collectAsState()
+        val buildInfo by logViewModel.buildInfo.collectAsState()
 
         MaterialTheme {
             Box(
@@ -103,6 +104,7 @@ fun main() = application {
                         bookmarkedLines = bookmarkedLines,
                         focusedLine = focusedLine,
                         selectedLines = selectedLines,
+                        buildInfo = buildInfo,
                         onFileDropped = { files -> logViewModel.loadFiles(files) },
                         onToggleBookmark = { index -> logViewModel.toggleBookmark(index) },
                         onFocusLine = { index -> logViewModel.setFocusedLine(index) },

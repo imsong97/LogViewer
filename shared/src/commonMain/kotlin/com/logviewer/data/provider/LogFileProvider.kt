@@ -1,6 +1,7 @@
 package com.logviewer.data.provider
 
 import com.logviewer.data.model.LogLine
+import com.logviewer.data.model.ParseResult
 import java.io.File
 
 interface LogFileProvider {
@@ -8,5 +9,5 @@ interface LogFileProvider {
     fun isSupported(file: File): Boolean
     suspend fun readLines(file: File): List<String>
     suspend fun mergeAndSort(fileMap: LinkedHashMap<String, List<String>>): List<Pair<String, String>>
-    suspend fun parseLines(mergedLines: List<Pair<String, String>>): List<LogLine>
+    suspend fun parseLines(mergedLines: List<Pair<String, String>>): ParseResult
 }
