@@ -71,7 +71,7 @@ class LogFileProviderImpl : LogFileProvider {
                 if (buildBranch.isEmpty()) {
                     val start = line.indexOf(PATTERN_BUILD_BRANCH)
                     if (start >= 0) {
-                        val valueStart = start + PATTERN_STEP.length
+                        val valueStart = start + PATTERN_BUILD_BRANCH.length
                         val valueEnd = line.indexOf("]", valueStart)
                         if (valueEnd > valueStart) {
                             buildBranch = line.substring(valueStart, valueEnd).trim()
