@@ -12,7 +12,7 @@ data class BuildInfo(
     }
 
     val hasAnyValues get() =
-        branch.isNotBlank() && step.isNotBlank() && swVersion.isNotBlank()
+        branch.isNotBlank() || step.isNotBlank() || swVersion.isNotBlank()
 }
 
 fun BuildInfoModel.toPresentation() = BuildInfo(
