@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- app title -->
+    <string name="app_title">LogViewer</string>
+
+    <!-- common -->
+    <string name="common_file_format_log">.log</string>
+    <string name="common_file_format_txt">.txt</string>
+    <string name="common_unsupported_file_message">Only .txt / .log files are supported.</string>
+    <string name="common_log_level_d">D</string>
+    <string name="common_log_level_e">E</string>
+    <string name="common_log_level_w">W</string>
+    <string name="common_dialog_btn_cancel">Cancel</string>
+    <string name="common_dialog_btn_confirm">OK</string>
+
+    <!-- drop box -->
+    <string name="dropbox_placeholder_icon">📄</string>
+    <string name="dropbox_placeholder">Drag .txt / .log files here</string>
+
+    <!-- search layout -->
+    <string name="search_label">Search</string>
+    <string name="search_placeholder"></string>
+    <string name="search_filter_on">Filter ON</string>
+    <string name="search_filter_off">Filter OFF</string>
+    <string name="search_tag_label">Tag</string>
+    <string name="search_tag_placeholder"></string>
+    <string name="search_tag_filter_on">Filter ON</string>
+    <string name="search_tag_filter_off">Filter OFF</string>
+    <string name="filter_log_level">LogLV</string>
+    <string name="filter_log_level_reset">Reset</string>
+    <string name="filter_bookmark">Bookmarks only</string>
+    <string name="hide_unparsed_logs">Hide unparsed</string>
+
+    <!-- file list layout -->
+    <string name="file_list_label">Files: </string>
+    <string name="file_remove">X</string>
+    <string name="file_remove_all">Remove all</string>
+    <string name="file_add_btn">+ Add</string>
+    <string name="file_remove_dialog_message">Delete all %1$d loaded files?</string>
+    <string name="file_remove_dialog_btn_delete">Delete</string>
+
+    <!-- header column -->
+    <string name="header_file">File</string>
+    <string name="header_date">Date</string>
+    <string name="header_time">Time</string>
+    <string name="header_log_level">LogLV</string>
+    <string name="header_thread">Thread</string>
+    <string name="header_tag">Tag</string>
+    <string name="header_description">Description</string>
+
+    <!-- file browser -->
+    <string name="file_browser_title">Select File</string>
+    <string name="file_browser_not_supported_title">Unsupported file type</string>
+
+    <!-- menuBar -->
+    <string name="menu_setting_title">Settings</string>
+    <string name="menu_item_user_settings">User Settings</string>
+</resources>

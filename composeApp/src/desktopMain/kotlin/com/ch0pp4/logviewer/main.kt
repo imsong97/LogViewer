@@ -21,8 +21,10 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import androidx.lifecycle.ViewModelStore
 import com.ch0pp4.logviewer.di.AppContainer
-import com.ch0pp4.logviewer.resources.AppStrings
 import com.ch0pp4.logviewer.ui.FileListLayout
+import logviewer.composeapp.generated.resources.Res
+import logviewer.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 import com.ch0pp4.logviewer.ui.LogContentLayout
 import com.ch0pp4.logviewer.ui.LogFilterLayout
 import com.logviewer.data.provider.LogFileProviderImpl
@@ -37,7 +39,7 @@ fun main() = application {
             viewModelStore.clear()
             exitApplication()
         },
-        title = AppStrings.APP_TITLE,
+        title = stringResource(Res.string.app_title),
         state = windowState,
     ) {
         val logViewModel: LogViewModel = remember(key1 = viewModelStore, appContainer) {

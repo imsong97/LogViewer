@@ -57,10 +57,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ch0pp4.logviewer.model.BuildInfo
-import com.ch0pp4.logviewer.model.ColumnDef
 import com.ch0pp4.logviewer.model.LogLine
 import com.ch0pp4.logviewer.resources.AppColors
-import com.ch0pp4.logviewer.resources.AppStrings
+import logviewer.composeapp.generated.resources.Res
+import logviewer.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.awt.Toolkit
@@ -168,9 +169,9 @@ fun LogContentLayout(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = AppStrings.DROPBOX_PLACEHOLDER_ICON, fontSize = 48.sp)
+                Text(text = stringResource(Res.string.dropbox_placeholder_icon), fontSize = 48.sp)
                 Spacer(modifier = Modifier.height(12.dp))
-                Text(text = AppStrings.DROPBOX_PLACEHOLDER, style = MaterialTheme.typography.body1, color = Color.Gray)
+                Text(text = stringResource(Res.string.dropbox_placeholder), style = MaterialTheme.typography.body1, color = Color.Gray)
             }
         } else {
             Box(modifier = Modifier.fillMaxSize()) {
@@ -266,7 +267,17 @@ private fun LogRow(
     onCtrlTap: () -> Unit,
     onDoubleTap: () -> Unit
 ) {
-    val textColor = logLVColor(logLine.logLv)
+    val levelE = stringResource(Res.string.common_log_level_e)
+    val levelW = stringResource(Res.string.common_log_level_w)
+    val levelD = stringResource(Res.string.common_log_level_d)
+
+    val textColor = when (logLine.logLv) {
+        levelE -> AppColors.logLevelError
+        levelW -> AppColors.logLevelWarning
+        levelD -> AppColors.logLevelDebug
+        else -> Color.Unspecified
+    }
+
     val hasBorder = isFocused || isSelected
     val bgColor = if (isBookmarked) AppColors.bookMarkBackground else Color.Transparent
 
@@ -312,7 +323,7 @@ private fun LogRow(
             fixedCells.forEachIndexed { i, cell ->
                 Text(
                     text = cell,
-                    modifier = Modifier.width(HEADER_COLUMNS[i].width).padding(horizontal = 4.dp),
+                    modifier = Modifier.width(HEADER_COLUMN_WIDTHS[i]).padding(horizontal = 4.dp),
                     fontFamily = FontFamily.Monospace,
                     fontSize = 12.sp,
                     color = if (i == 0) Color.Unspecified else textColor,
@@ -332,13 +343,13 @@ private fun LogRow(
             // if it can not parse, fill description with raw text
             Text(
                 text = logLine.fileName,
-                modifier = Modifier.width(HEADER_COLUMNS[0].width).padding(horizontal = 4.dp),
+                modifier = Modifier.width(HEADER_COLUMN_WIDTHS[0]).padding(horizontal = 4.dp),
                 fontFamily = FontFamily.Monospace,
                 fontSize = 12.sp,
                 maxLines = 1
             )
-            HEADER_COLUMNS.drop(1).forEach { col ->
-                Spacer(modifier = Modifier.width(col.width))
+            HEADER_COLUMN_WIDTHS.drop(1).forEach { width ->
+                Spacer(modifier = Modifier.width(width))
             }
             Text(
                 text = logLine.text,
@@ -387,10 +398,18 @@ private fun HeaderRow() {
             .padding(vertical = 4.dp)
     ) {
         // header
-        HEADER_COLUMNS.forEach { col ->
+        val headerTitles = listOf(
+            stringResource(Res.string.header_file),
+            stringResource(Res.string.header_date),
+            stringResource(Res.string.header_time),
+            stringResource(Res.string.header_log_level),
+            stringResource(Res.string.header_thread),
+            stringResource(Res.string.header_tag),
+        )
+        headerTitles.zip(HEADER_COLUMN_WIDTHS).forEach { (title, width) ->
             Text(
-                text = col.title,
-                modifier = Modifier.width(col.width).padding(horizontal = 4.dp),
+                text = title,
+                modifier = Modifier.width(width).padding(horizontal = 4.dp),
                 fontFamily = FontFamily.Monospace,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
@@ -400,7 +419,7 @@ private fun HeaderRow() {
         }
         // header - description
         Text(
-            text = AppStrings.HEADER_DESCRIPTION,
+            text = stringResource(Res.string.header_description),
             modifier = Modifier.weight(1f).padding(horizontal = 4.dp),
             fontFamily = FontFamily.Monospace,
             fontSize = 12.sp,
@@ -412,19 +431,4 @@ private fun HeaderRow() {
     Divider(color = AppColors.logHeaderDivider, thickness = 1.dp)
 }
 
-// header columns
-private val HEADER_COLUMNS = listOf(
-    ColumnDef(AppStrings.HEADER_FILE, 160.dp),
-    ColumnDef(AppStrings.HEADER_DATE, 72.dp),
-    ColumnDef(AppStrings.HEADER_TIME, 104.dp),
-    ColumnDef(AppStrings.HEADER_LOG_LEVEL, 48.dp),
-    ColumnDef(AppStrings.HEADER_THREAD, 64.dp),
-    ColumnDef(AppStrings.HEADER_TAG, 180.dp),
-)
-
-private fun logLVColor(level: String?): Color = when (level) {
-    AppStrings.COMMON_LOG_LEVEL_E -> AppColors.logLevelError
-    AppStrings.COMMON_LOG_LEVEL_W -> AppColors.logLevelWarning
-    AppStrings.COMMON_LOG_LEVEL_D -> AppColors.logLevelDebug
-    else -> Color.Unspecified
-}
+private val HEADER_COLUMN_WIDTHS = listOf(160.dp, 72.dp, 104.dp, 48.dp, 64.dp, 180.dp)
