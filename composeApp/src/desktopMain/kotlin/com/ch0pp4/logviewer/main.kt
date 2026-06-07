@@ -59,6 +59,7 @@ fun main() = application {
         val existFile by logViewModel.existFile.collectAsState()
         val displayLines by logViewModel.displayLines.collectAsState(initial = emptyList())
         val loadedFiles by logViewModel.loadedFiles.collectAsState()
+        val hiddenFiles by logViewModel.hiddenFiles.collectAsState()
         val isLoading by logViewModel.isLoading.collectAsState()
         val showUnsupportedDialog by logViewModel.showUnSupportedDialog.collectAsState()
         val buildInfo by logViewModel.buildInfo.collectAsState()
@@ -90,9 +91,11 @@ fun main() = application {
 
                     FileListLayout(
                         loadedFiles = loadedFiles,
+                        hiddenFiles = hiddenFiles,
                         showUnSupportedDialog = showUnsupportedDialog,
                         onLoadFiles = { files -> logViewModel.loadFiles(files) },
                         onRemoveFile = { fileName -> logViewModel.removeFile(fileName) },
+                        onToggleFileVisibility = { fileName -> logViewModel.toggleFileVisibility(fileName) },
                         onDismissUnsupportedDialog = { logViewModel.dismissUnsupportedDialog() },
                         clearAll = { logViewModel.clearAll() },
                     )

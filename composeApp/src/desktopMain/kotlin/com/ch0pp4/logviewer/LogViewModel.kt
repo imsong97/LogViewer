@@ -89,6 +89,9 @@ class LogViewModel(
     private val _loadedFiles = MutableStateFlow<List<String>>(emptyList())
     val loadedFiles: StateFlow<List<String>> = _loadedFiles.asStateFlow()
 
+    private val _hiddenFiles = MutableStateFlow<Set<String>>(emptySet())
+    val hiddenFiles: StateFlow<Set<String>> = _hiddenFiles.asStateFlow()
+
     // debounce query
     private val debouncedSearchQuery = _searchQuery.debounce(300L)
     private val debouncedTagQuery = _tagQuery.debounce(300L)
@@ -98,13 +101,15 @@ class LogViewModel(
         combine(
             combine(_parsedLines, _bookmarkedLines, _showOnlyBookmarks) { lines, bookmarks, onlyBookmarks -> Triple(lines, bookmarks, onlyBookmarks) },
             combine(_activeTagFilters, debouncedSearchQuery, _searchEnabled) { tagFilters, query, enabled -> Triple(tagFilters, query, enabled) },
-            combine(debouncedTagQuery, _tagSearchEnabled, _hideUnparsed) { tagQuery, tagEnabled, hideUnparsed -> Triple(tagQuery, tagEnabled, hideUnparsed) }
-        ) { (parsedLines, bookmarks, onlyBookmarks), (tagFilters, query, enabled), (tagQuery, tagEnabled, hideUnparsed) ->
+            combine(debouncedTagQuery, _tagSearchEnabled, _hideUnparsed) { tagQuery, tagEnabled, hideUnparsed -> Triple(tagQuery, tagEnabled, hideUnparsed) },
+            _hiddenFiles
+        ) { (parsedLines, bookmarks, onlyBookmarks), (tagFilters, query, enabled), (tagQuery, tagEnabled, hideUnparsed), hiddenFiles ->
             val keywords = if (enabled) query.split("|").map { it.trim() }.filter { it.isNotEmpty() } else emptyList()
             val tagKeywords = if (tagEnabled) tagQuery.split("|").map { it.trim() }.filter { it.isNotEmpty() } else emptyList()
 
             parsedLines.filter { logLine ->
                 val index = logLine.index
+                if (logLine.fileName in hiddenFiles) return@filter false
                 if (hideUnparsed && !logLine.isParsed) return@filter false
                 val passBookmark = !onlyBookmarks || index in bookmarks
                 val passLevel = tagFilters.isEmpty() || logLine.logLv in tagFilters
@@ -128,6 +133,10 @@ class LogViewModel(
             yield() // UI rendering first
             val startTime = System.currentTimeMillis()
 
+            val oldParsedLines = _parsedLines.value
+            val oldBookmarks = _bookmarkedLines.value
+            val isFirstLoad = !_existFile.value
+
             val result = withContext(Dispatchers.Default) {
                 val currentMap = LinkedHashMap(_fileLineMap.value)
                 val loadedEntries = coroutineScope {
@@ -146,21 +155,19 @@ class LogViewModel(
                 val parseResult = logFileProvider.parseLines(mergedLines)
                 val parsedLines = parseResult.lines.map { it.toPresentation() }
                 val buildInfo = parseResult.buildInfo.toPresentation()
+                val newBookmarks = if (isFirstLoad) emptySet()
+                                   else remapBookmarks(oldParsedLines, oldBookmarks, parsedLines)
 
-                Pair(
-                    LoadResult(currentMap, parsedLines, !_existFile.value),
-                    buildInfo
-                )
-
+                Triple(LoadResult(currentMap, parsedLines, isFirstLoad), buildInfo, newBookmarks)
             }
 
             _fileLineMap.value = result.first.fileMap
             _loadedFiles.value = result.first.fileMap.keys.toList()
             _parsedLines.value = result.first.lines
             _buildInfo.value = result.second
+            _bookmarkedLines.value = result.third
 
-            if (result.first.isFirstLoad) {
-                _bookmarkedLines.value = emptySet()
+            if (isFirstLoad) {
                 _focusedLine.value = null
             }
             _existFile.value = true
@@ -170,6 +177,34 @@ class LogViewModel(
             if (elapsed < 500L) delay(500L - elapsed)
             _isLoading.value = false
         }
+    }
+
+    /**
+     * []파일 추가 로드 시 북마크 라인 상이함 이슈]
+     * 파일 추가로 전체 재인덱싱 후 북마크 index를 새 index로 매핑
+     * 동일 (fileName, text) 중복 라인은 출현 순서(N번째)를 기준으로 매핑
+     */
+    private fun remapBookmarks(
+        oldLines: List<LogLine>,
+        oldBookmarks: Set<Int>,
+        newLines: List<LogLine>
+    ): Set<Int> {
+        if (oldBookmarks.isEmpty()) return emptySet()
+
+        val newLinesByKey = newLines.groupBy { it.fileName to it.text }
+        val occurrenceCount = mutableMapOf<Pair<String, String>, Int>()
+        val newBookmarks = mutableSetOf<Int>()
+
+        oldLines.forEach { line ->
+            val key = line.fileName to line.text
+            val occurrence = occurrenceCount.getOrDefault(key, 0)
+            if (line.index in oldBookmarks) {
+                newLinesByKey[key]?.getOrNull(occurrence)?.let { newBookmarks.add(it.index) }
+            }
+            occurrenceCount[key] = occurrence + 1
+        }
+
+        return newBookmarks
     }
 
     fun dismissUnsupportedDialog() {
@@ -206,6 +241,7 @@ class LogViewModel(
                 _loadedFiles.value = removeResult.first.fileMap.keys.toList()
                 _parsedLines.value = removeResult.first.lines
                 _buildInfo.value = removeResult.second
+                _hiddenFiles.update { it - fileName }
                 _bookmarkedLines.value = emptySet()
                 _focusedLine.value = null
                 _existFile.value = true
@@ -214,6 +250,12 @@ class LogViewModel(
             val elapsed = System.currentTimeMillis() - startTime
             if (elapsed < 500L) delay(500L - elapsed)
             _isLoading.value = false
+        }
+    }
+
+    fun toggleFileVisibility(fileName: String) {
+        _hiddenFiles.update { current ->
+            if (fileName in current) current - fileName else current + fileName
         }
     }
 
@@ -283,6 +325,7 @@ class LogViewModel(
         _tagQuery.value = ""
         _tagSearchEnabled.value = true
         _loadedFiles.value = emptyList()
+        _hiddenFiles.value = emptySet()
         _fileLineMap.value = LinkedHashMap()
         _buildInfo.value = BuildInfo.EMPTY
     }

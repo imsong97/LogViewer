@@ -23,7 +23,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ch0pp4.logviewer.resources.AppColors
@@ -39,9 +41,11 @@ import javax.swing.SwingUtilities
 @Composable
 fun FileListLayout(
     loadedFiles: List<String>,
+    hiddenFiles: Set<String> = emptySet(),
     showUnSupportedDialog: Boolean = false,
     onLoadFiles: (List<File>) -> Unit,
     onRemoveFile: (String) -> Unit,
+    onToggleFileVisibility: (String) -> Unit = {},
     onDismissUnsupportedDialog: () -> Unit = {},
     clearAll: () -> Unit
 ) {
@@ -141,8 +145,10 @@ fun FileListLayout(
         ) {
             Text(text = stringResource(Res.string.file_list_label), fontSize = 11.sp, color = Color.Gray)
             loadedFiles.forEach { fileName ->
+                val isHidden = fileName in hiddenFiles
                 Row(
                     modifier = Modifier
+                        .alpha(if (isHidden) 0.4f else 1f)
                         .background(
                             color = AppColors.fileTagBackground,
                             shape = RoundedCornerShape(size = 4.dp)
@@ -150,7 +156,15 @@ fun FileListLayout(
                         .padding(start = 6.dp, end = 2.dp, top = 2.dp, bottom = 2.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = fileName, fontSize = 11.sp, color = AppColors.fileTagText)
+                    Text(
+                        text = fileName,
+                        fontSize = 11.sp,
+                        color = AppColors.fileTagText,
+                        textDecoration = if (isHidden) TextDecoration.LineThrough else TextDecoration.None,
+                        modifier = Modifier
+                            .clickable { onToggleFileVisibility(fileName) }
+                            .padding(end = 2.dp)
+                    )
                     Text(
                         text = stringResource(Res.string.file_remove),
                         fontSize = 11.sp,
