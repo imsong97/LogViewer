@@ -118,7 +118,7 @@ class LogViewModel(
 
                 passBookmark && passLevel && passSearch && passTagSearch
             }
-        }.flowOn(Dispatchers.IO)
+        }.flowOn(Dispatchers.Default)
 
     fun loadFiles(files: List<File>) {
         val supportedFiles = files.filter { logFileProvider.isSupported(it) }
@@ -224,25 +224,25 @@ class LogViewModel(
             if (currentMap.isEmpty()) {
                 clearAll()
             } else {
+                val oldParsedLines = _parsedLines.value
+                val oldBookmarks = _bookmarkedLines.value
+
                 val removeResult = withContext(Dispatchers.Default) {
                     val merged = logFileProvider.mergeAndSort(currentMap)
                     val parseResult = logFileProvider.parseLines(merged)
                     val parsedLines = parseResult.lines.map { it.toPresentation() }
                     val buildInfo = parseResult.buildInfo.toPresentation()
+                    val newBookmarks = remapBookmarks(oldParsedLines, oldBookmarks, parsedLines)
 
-                    Pair(
-                        RemoveResult(currentMap, parsedLines),
-                        buildInfo
-                    )
-
+                    Triple(RemoveResult(currentMap, parsedLines), buildInfo, newBookmarks)
                 }
 
                 _fileLineMap.value = removeResult.first.fileMap
                 _loadedFiles.value = removeResult.first.fileMap.keys.toList()
                 _parsedLines.value = removeResult.first.lines
                 _buildInfo.value = removeResult.second
+                _bookmarkedLines.value = removeResult.third
                 _hiddenFiles.update { it - fileName }
-                _bookmarkedLines.value = emptySet()
                 _focusedLine.value = null
                 _existFile.value = true
             }

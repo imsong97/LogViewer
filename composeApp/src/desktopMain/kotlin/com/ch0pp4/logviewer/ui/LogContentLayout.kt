@@ -267,14 +267,11 @@ private fun LogRow(
     onCtrlTap: () -> Unit,
     onDoubleTap: () -> Unit
 ) {
-    val levelE = stringResource(Res.string.common_log_level_e)
-    val levelW = stringResource(Res.string.common_log_level_w)
-    val levelD = stringResource(Res.string.common_log_level_d)
 
     val textColor = when (logLine.logLv) {
-        levelE -> AppColors.logLevelError
-        levelW -> AppColors.logLevelWarning
-        levelD -> AppColors.logLevelDebug
+        "E" -> AppColors.logLevelError
+        "W" -> AppColors.logLevelWarning
+        "D" -> AppColors.logLevelDebug
         else -> Color.Unspecified
     }
 
