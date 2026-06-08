@@ -21,8 +21,10 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import androidx.lifecycle.ViewModelStore
 import com.ch0pp4.logviewer.di.AppContainer
-import com.ch0pp4.logviewer.resources.AppStrings
 import com.ch0pp4.logviewer.ui.FileListLayout
+import logviewer.composeapp.generated.resources.Res
+import logviewer.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 import com.ch0pp4.logviewer.ui.LogContentLayout
 import com.ch0pp4.logviewer.ui.LogFilterLayout
 import com.logviewer.data.provider.LogFileProviderImpl
@@ -37,7 +39,7 @@ fun main() = application {
             viewModelStore.clear()
             exitApplication()
         },
-        title = AppStrings.APP_TITLE,
+        title = stringResource(Res.string.app_title),
         state = windowState,
     ) {
         val logViewModel: LogViewModel = remember(key1 = viewModelStore, appContainer) {
@@ -57,6 +59,7 @@ fun main() = application {
         val existFile by logViewModel.existFile.collectAsState()
         val displayLines by logViewModel.displayLines.collectAsState(initial = emptyList())
         val loadedFiles by logViewModel.loadedFiles.collectAsState()
+        val hiddenFiles by logViewModel.hiddenFiles.collectAsState()
         val isLoading by logViewModel.isLoading.collectAsState()
         val showUnsupportedDialog by logViewModel.showUnSupportedDialog.collectAsState()
         val buildInfo by logViewModel.buildInfo.collectAsState()
@@ -88,9 +91,11 @@ fun main() = application {
 
                     FileListLayout(
                         loadedFiles = loadedFiles,
+                        hiddenFiles = hiddenFiles,
                         showUnSupportedDialog = showUnsupportedDialog,
                         onLoadFiles = { files -> logViewModel.loadFiles(files) },
                         onRemoveFile = { fileName -> logViewModel.removeFile(fileName) },
+                        onToggleFileVisibility = { fileName -> logViewModel.toggleFileVisibility(fileName) },
                         onDismissUnsupportedDialog = { logViewModel.dismissUnsupportedDialog() },
                         clearAll = { logViewModel.clearAll() },
                     )

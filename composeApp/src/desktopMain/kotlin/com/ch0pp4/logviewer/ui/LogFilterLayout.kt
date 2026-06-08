@@ -21,7 +21,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ch0pp4.logviewer.resources.AppColors
-import com.ch0pp4.logviewer.resources.AppStrings
+import logviewer.composeapp.generated.resources.Res
+import logviewer.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun LogFilterLayout(
@@ -42,6 +44,10 @@ fun LogFilterLayout(
     onClearLevelFilters: () -> Unit = {},
     onToggleHideUnparsed: () -> Unit = {},
 ) {
+    val levelD = stringResource(Res.string.common_log_level_d)
+    val levelW = stringResource(Res.string.common_log_level_w)
+    val levelE = stringResource(Res.string.common_log_level_e)
+
     val textFieldColors = TextFieldDefaults.colors(
         unfocusedContainerColor = AppColors.textFieldBackground,
         focusedContainerColor = AppColors.textFieldFocusBackground,
@@ -63,13 +69,13 @@ fun LogFilterLayout(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = AppStrings.SEARCH_LABEL, modifier = Modifier.width(width = 70.dp))
+            Text(text = stringResource(Res.string.search_label), modifier = Modifier.width(width = 70.dp))
             TextField(
                 value = searchQuery,
                 onValueChange = { onSearchQueryChange(it) },
                 singleLine = true,
                 modifier = Modifier.weight(weight = 1f).padding(end = 8.dp),
-                placeholder = { Text(text = AppStrings.SEARCH_PLACEHOLDER) },
+                placeholder = { Text(text = stringResource(Res.string.search_placeholder)) },
                 colors = textFieldColors,
                 shape = androidx.compose.foundation.shape.RoundedCornerShape(size = 8.dp),
             )
@@ -79,7 +85,7 @@ fun LogFilterLayout(
                 onClick = onToggleSearchEnabled,
                 label = {
                     Text(
-                        text = if (searchEnabled) AppStrings.SEARCH_FILTER_ON else AppStrings.SEARCH_FILTER_OFF,
+                        text = if (searchEnabled) stringResource(Res.string.search_filter_on) else stringResource(Res.string.search_filter_off),
                         fontSize = 12.sp
                     )
                 },
@@ -97,13 +103,13 @@ fun LogFilterLayout(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = AppStrings.SEARCH_TAG_LABEL, modifier = Modifier.width(width = 70.dp))
+            Text(text = stringResource(Res.string.search_tag_label), modifier = Modifier.width(width = 70.dp))
             TextField(
                 value = tagQuery,
                 onValueChange = { onTagQueryChange(it) },
                 singleLine = true,
                 modifier = Modifier.weight(weight = 1f).padding(end = 8.dp),
-                placeholder = { Text(text = AppStrings.SEARCH_TAG_PLACEHOLDER) },
+                placeholder = { Text(text = stringResource(Res.string.search_tag_placeholder)) },
                 colors = textFieldColors,
                 shape = androidx.compose.foundation.shape.RoundedCornerShape(size = 8.dp),
             )
@@ -113,7 +119,7 @@ fun LogFilterLayout(
                 onClick = onToggleTagSearchEnabled,
                 label = {
                     Text(
-                        text = if (tagSearchEnabled) AppStrings.SEARCH_TAG_FILTER_ON else AppStrings.SEARCH_TAG_FILTER_OFF,
+                        text = if (tagSearchEnabled) stringResource(Res.string.search_tag_filter_on) else stringResource(Res.string.search_tag_filter_off),
                         fontSize = 12.sp
                     )
                 },
@@ -130,11 +136,11 @@ fun LogFilterLayout(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(space = 6.dp)
         ) {
-            Text(text = AppStrings.FILTER_LOG_LEVEL, fontSize = 13.sp)
+            Text(text = stringResource(Res.string.filter_log_level), fontSize = 13.sp)
             FilterChip(
-                selected = AppStrings.COMMON_LOG_LEVEL_D in activeTagFilters,
-                onClick = { onToggleLevelFilter(AppStrings.COMMON_LOG_LEVEL_D) },
-                label = { Text(text = AppStrings.COMMON_LOG_LEVEL_D, fontSize = 12.sp) },
+                selected = levelD in activeTagFilters,
+                onClick = { onToggleLevelFilter(levelD) },
+                label = { Text(text = levelD, fontSize = 12.sp) },
                 colors = FilterChipDefaults.filterChipColors(
                     selectedContainerColor = AppColors.chipDebugBackground,
                     selectedLabelColor = AppColors.chipDebugText,
@@ -142,9 +148,9 @@ fun LogFilterLayout(
             )
 
             FilterChip(
-                selected = AppStrings.COMMON_LOG_LEVEL_W in activeTagFilters,
-                onClick = { onToggleLevelFilter(AppStrings.COMMON_LOG_LEVEL_W) },
-                label = { Text(text = AppStrings.COMMON_LOG_LEVEL_W, fontSize = 12.sp) },
+                selected = levelW in activeTagFilters,
+                onClick = { onToggleLevelFilter(levelW) },
+                label = { Text(text = levelW, fontSize = 12.sp) },
                 colors = FilterChipDefaults.filterChipColors(
                     selectedContainerColor = AppColors.chipWarningBackground,
                     selectedLabelColor = AppColors.chipWarningText,
@@ -152,9 +158,9 @@ fun LogFilterLayout(
             )
 
             FilterChip(
-                selected = AppStrings.COMMON_LOG_LEVEL_E in activeTagFilters,
-                onClick = { onToggleLevelFilter(AppStrings.COMMON_LOG_LEVEL_E) },
-                label = { Text(text = AppStrings.COMMON_LOG_LEVEL_E, fontSize = 12.sp) },
+                selected = levelE in activeTagFilters,
+                onClick = { onToggleLevelFilter(levelE) },
+                label = { Text(text = levelE, fontSize = 12.sp) },
                 colors = FilterChipDefaults.filterChipColors(
                     selectedContainerColor = AppColors.chipErrorBackground,
                     selectedLabelColor = AppColors.chipErrorText,
@@ -163,7 +169,7 @@ fun LogFilterLayout(
 
             if (activeTagFilters.isNotEmpty()) {
                 TextButton(onClick = onClearLevelFilters) {
-                    Text(text = AppStrings.FILTER_LOG_LEVEL_RESET, fontSize = 11.sp, color = Color.Gray)
+                    Text(text = stringResource(Res.string.filter_log_level_reset), fontSize = 11.sp, color = Color.Gray)
                 }
             }
 
@@ -172,7 +178,7 @@ fun LogFilterLayout(
             FilterChip(
                 selected = showOnlyBookmarks,
                 onClick = onToggleBookmarks,
-                label = { Text(text = AppStrings.FILTER_BOOKMARK, fontSize = 12.sp) },
+                label = { Text(text = stringResource(Res.string.filter_bookmark), fontSize = 12.sp) },
                 colors = FilterChipDefaults.filterChipColors(
                     selectedContainerColor = AppColors.chipBookMarkBackground,
                     selectedLabelColor = AppColors.chipBookMarkText,
@@ -182,7 +188,7 @@ fun LogFilterLayout(
             FilterChip(
                 selected = hideUnparsed,
                 onClick = onToggleHideUnparsed,
-                label = { Text(text = AppStrings.HIDE_UNPARSED_LOGS, fontSize = 12.sp) },
+                label = { Text(text = stringResource(Res.string.hide_unparsed_logs), fontSize = 12.sp) },
                 colors = FilterChipDefaults.filterChipColors(
                     selectedContainerColor = AppColors.chipErrorBackground,
                     selectedLabelColor = AppColors.chipErrorText,
