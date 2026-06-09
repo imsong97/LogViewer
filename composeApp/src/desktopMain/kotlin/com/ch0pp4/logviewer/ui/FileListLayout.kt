@@ -1,6 +1,5 @@
 package com.ch0pp4.logviewer.ui
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -13,9 +12,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults.buttonColors
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import com.ch0pp4.logviewer.ui.components.DeleteDialog
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,6 +49,7 @@ fun FileListLayout(
     clearAll: () -> Unit
 ) {
     var showClearConfirm by remember { mutableStateOf(false) }
+    var fileToRemove by remember { mutableStateOf<String?>(null) }
 
     val fileBrowserTitle = stringResource(Res.string.file_browser_title)
 
@@ -70,31 +70,31 @@ fun FileListLayout(
         )
     }
 
+    fileToRemove?.let { fileName ->
+        DeleteDialog(
+            title = stringResource(Res.string.file_remove_single_dialog_title),
+            message = stringResource(Res.string.file_remove_single_dialog_message, fileName),
+            confirmText = stringResource(Res.string.file_remove_dialog_btn_delete),
+            onConfirm = {
+                onRemoveFile(fileName)
+                fileToRemove = null
+            },
+            dismissText = stringResource(Res.string.common_dialog_btn_cancel),
+            onDismiss = { fileToRemove = null },
+        )
+    }
+
     if (showClearConfirm) {
-        AlertDialog(
-            onDismissRequest = {},
-            title = { Text(text = stringResource(Res.string.file_remove_all), color = AppColors.textFieldText) },
-            text = { Text(text = stringResource(Res.string.file_remove_dialog_message, loadedFiles.size), color = AppColors.textFieldText) },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        clearAll()
-                        showClearConfirm = false
-                    },
-                    colors = buttonColors(containerColor = AppColors.deleteDialogButtonDeleteBackground)
-                ) {
-                    Text(text = stringResource(Res.string.file_remove_dialog_btn_delete), color = AppColors.deleteDialogButtonDelete)
-                }
+        DeleteDialog(
+            title = stringResource(Res.string.file_remove_all),
+            message = stringResource(Res.string.file_remove_dialog_message, loadedFiles.size),
+            confirmText = stringResource(Res.string.file_remove_dialog_btn_delete),
+            onConfirm = {
+                clearAll()
+                showClearConfirm = false
             },
-            dismissButton = {
-                OutlinedButton(
-                    onClick = { showClearConfirm = false },
-                    border = BorderStroke(width = 1.dp, color = AppColors.deleteDialogButtonCancelBackground),
-                ) {
-                    Text(text = stringResource(Res.string.common_dialog_btn_cancel), color = AppColors.deleteDialogButtonCancel)
-                }
-            },
-            containerColor = Color.White,
+            dismissText = stringResource(Res.string.common_dialog_btn_cancel),
+            onDismiss = { showClearConfirm = false },
         )
     }
 
@@ -170,7 +170,7 @@ fun FileListLayout(
                         fontSize = 11.sp,
                         color = AppColors.fileTagText,
                         modifier = Modifier
-                            .clickable { onRemoveFile(fileName) }
+                            .clickable { fileToRemove = fileName }
                             .padding(horizontal = 4.dp)
                     )
                 }
