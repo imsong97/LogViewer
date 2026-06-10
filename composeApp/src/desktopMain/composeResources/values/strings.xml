@@ -39,7 +39,7 @@
     <string name="file_remove_dialog_message">Delete all %1$d loaded files?</string>
     <string name="file_remove_dialog_btn_delete">Delete</string>
     <string name="file_remove_single_dialog_title">Remove file</string>
-    <string name="file_remove_single_dialog_message">Remove \"%1$s\" from the viewer?</string>
+    <string name="file_remove_single_dialog_message">Remove %s from the viewer?</string>
 
     <!-- header column -->
     <string name="header_file">File</string>
