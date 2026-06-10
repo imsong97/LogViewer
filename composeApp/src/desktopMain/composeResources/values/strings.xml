@@ -30,6 +30,7 @@
     <string name="filter_log_level_reset">Reset</string>
     <string name="filter_bookmark">Bookmarks only</string>
     <string name="hide_unparsed_logs">Hide unparsed</string>
+    <string name="tag_list_description">tag list</string>
 
     <!-- file list layout -->
     <string name="file_list_label">Files: </string>

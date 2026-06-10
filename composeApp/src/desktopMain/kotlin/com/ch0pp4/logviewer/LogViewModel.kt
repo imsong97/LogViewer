@@ -83,6 +83,9 @@ class LogViewModel(
     private val _tagSearchEnabled = MutableStateFlow(true)
     val tagSearchEnabled: StateFlow<Boolean> = _tagSearchEnabled.asStateFlow()
 
+    private val _availableTags = MutableStateFlow<List<String>>(emptyList())
+    val availableTags: StateFlow<List<String>> = _availableTags.asStateFlow()
+
     // for merging when file added/removed
     private val _fileLineMap = MutableStateFlow<LinkedHashMap<String, List<String>>>(LinkedHashMap())
 
@@ -154,18 +157,20 @@ class LogViewModel(
                 val mergedLines = logFileProvider.mergeAndSort(currentMap)
                 val parseResult = logFileProvider.parseLines(mergedLines)
                 val parsedLines = parseResult.lines.map { it.toPresentation() }
+                val tags = parsedLines.mapNotNull { it.tag }.filter { it.isNotBlank() }.distinct().sorted()
                 val buildInfo = parseResult.buildInfo.toPresentation()
                 val newBookmarks = if (isFirstLoad) emptySet()
                                    else remapBookmarks(oldParsedLines, oldBookmarks, parsedLines)
 
-                Triple(LoadResult(currentMap, parsedLines, isFirstLoad), buildInfo, newBookmarks)
+                Triple(LoadResult(currentMap, parsedLines, isFirstLoad), buildInfo, newBookmarks) to tags
             }
 
-            _fileLineMap.value = result.first.fileMap
-            _loadedFiles.value = result.first.fileMap.keys.toList()
-            _parsedLines.value = result.first.lines
-            _buildInfo.value = result.second
-            _bookmarkedLines.value = result.third
+            _fileLineMap.value = result.first.first.fileMap
+            _loadedFiles.value = result.first.first.fileMap.keys.toList()
+            _parsedLines.value = result.first.first.lines
+            _buildInfo.value = result.first.second
+            _bookmarkedLines.value = result.first.third
+            _availableTags.value = result.second
 
             if (isFirstLoad) {
                 _focusedLine.value = null
@@ -180,7 +185,7 @@ class LogViewModel(
     }
 
     /**
-     * []파일 추가 로드 시 북마크 라인 상이함 이슈]
+     * [파일 추가 로드 시 북마크 라인 상이함 이슈]
      * 파일 추가로 전체 재인덱싱 후 북마크 index를 새 index로 매핑
      * 동일 (fileName, text) 중복 라인은 출현 순서(N번째)를 기준으로 매핑
      */
@@ -231,17 +236,19 @@ class LogViewModel(
                     val merged = logFileProvider.mergeAndSort(currentMap)
                     val parseResult = logFileProvider.parseLines(merged)
                     val parsedLines = parseResult.lines.map { it.toPresentation() }
+                    val tags = parsedLines.mapNotNull { it.tag }.filter { it.isNotBlank() }.distinct().sorted()
                     val buildInfo = parseResult.buildInfo.toPresentation()
                     val newBookmarks = remapBookmarks(oldParsedLines, oldBookmarks, parsedLines)
 
-                    Triple(RemoveResult(currentMap, parsedLines), buildInfo, newBookmarks)
+                    Triple(RemoveResult(currentMap, parsedLines), buildInfo, newBookmarks) to tags
                 }
 
-                _fileLineMap.value = removeResult.first.fileMap
-                _loadedFiles.value = removeResult.first.fileMap.keys.toList()
-                _parsedLines.value = removeResult.first.lines
-                _buildInfo.value = removeResult.second
-                _bookmarkedLines.value = removeResult.third
+                _fileLineMap.value = removeResult.first.first.fileMap
+                _loadedFiles.value = removeResult.first.first.fileMap.keys.toList()
+                _parsedLines.value = removeResult.first.first.lines
+                _buildInfo.value = removeResult.first.second
+                _bookmarkedLines.value = removeResult.first.third
+                _availableTags.value = removeResult.second
                 _hiddenFiles.update { it - fileName }
                 _focusedLine.value = null
                 _existFile.value = true
@@ -328,5 +335,6 @@ class LogViewModel(
         _hiddenFiles.value = emptySet()
         _fileLineMap.value = LinkedHashMap()
         _buildInfo.value = BuildInfo.EMPTY
+        _availableTags.value = emptyList()
     }
 }
