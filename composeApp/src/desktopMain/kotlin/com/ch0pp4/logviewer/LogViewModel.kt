@@ -311,6 +311,36 @@ class LogViewModel(
         _tagSearchEnabled.update { !it }
     }
 
+    fun focusNextBookmark(displayLines: List<LogLine>) {
+        val bookmarks = _bookmarkedLines.value
+        if (bookmarks.isEmpty()) return
+        val bookmarkedInDisplay = displayLines.filter { it.index in bookmarks }
+        if (bookmarkedInDisplay.isEmpty()) return
+        val current = _focusedLine.value
+        val next = if (current == null) {
+            bookmarkedInDisplay.first()
+        } else {
+            bookmarkedInDisplay.firstOrNull { it.index > current } ?: bookmarkedInDisplay.first()
+        }
+        _focusedLine.value = next.index
+        _selectedLines.value = emptySet()
+    }
+
+    fun focusPrevBookmark(displayLines: List<LogLine>) {
+        val bookmarks = _bookmarkedLines.value
+        if (bookmarks.isEmpty()) return
+        val bookmarkedInDisplay = displayLines.filter { it.index in bookmarks }
+        if (bookmarkedInDisplay.isEmpty()) return
+        val current = _focusedLine.value
+        val prev = if (current == null) {
+            bookmarkedInDisplay.last()
+        } else {
+            bookmarkedInDisplay.lastOrNull { it.index < current } ?: bookmarkedInDisplay.last()
+        }
+        _focusedLine.value = prev.index
+        _selectedLines.value = emptySet()
+    }
+
     fun clearAll() {
         _parsedLines.value = emptyList()
         _bookmarkedLines.value = emptySet()
