@@ -13,6 +13,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -33,6 +37,10 @@ fun main() = application {
     val windowState = rememberWindowState(size = DpSize(width = 1400.dp, height = 900.dp))
     val viewModelStore = remember { ViewModelStore() }
     val appContainer = remember { AppContainer() }
+    val logViewModel: LogViewModel = remember(key1 = viewModelStore, appContainer) {
+        appContainer.getLogViewModel(viewModelStore)
+    }
+    val displayLines by logViewModel.displayLines.collectAsState(initial = emptyList())
 
     Window(
         onCloseRequest = {
@@ -41,11 +49,16 @@ fun main() = application {
         },
         title = stringResource(Res.string.app_title),
         state = windowState,
-    ) {
-        val logViewModel: LogViewModel = remember(key1 = viewModelStore, appContainer) {
-            appContainer.getLogViewModel(viewModelStore)
+        onKeyEvent = { event ->
+            if (event.type == KeyEventType.KeyUp) {
+                when (event.key) {
+                    Key.F1 -> { logViewModel.focusPrevBookmark(displayLines); true }
+                    Key.F2 -> { logViewModel.focusNextBookmark(displayLines); true }
+                    else -> false
+                }
+            } else false
         }
-
+    ) {
         val showOnlyBookmarks by logViewModel.showOnlyBookmarks.collectAsState()
         val activeTagFilters by logViewModel.activeTagFilters.collectAsState()
         val searchQuery by logViewModel.searchQuery.collectAsState()
@@ -57,7 +70,6 @@ fun main() = application {
         val focusedLine by logViewModel.focusedLine.collectAsState()
         val selectedLines by logViewModel.selectedLines.collectAsState()
         val existFile by logViewModel.existFile.collectAsState()
-        val displayLines by logViewModel.displayLines.collectAsState(initial = emptyList())
         val loadedFiles by logViewModel.loadedFiles.collectAsState()
         val hiddenFiles by logViewModel.hiddenFiles.collectAsState()
         val isLoading by logViewModel.isLoading.collectAsState()

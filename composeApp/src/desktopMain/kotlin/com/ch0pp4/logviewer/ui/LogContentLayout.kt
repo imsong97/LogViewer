@@ -26,6 +26,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -88,6 +89,14 @@ fun LogContentLayout(
     var isDraggingOver by remember { mutableStateOf(false) }
     val listState = rememberLazyListState()
     val focusRequester = remember { FocusRequester() }
+
+    // F1, F2 시 라인 스크롤
+    LaunchedEffect(focusedLine) {
+        if (focusedLine != null) {
+            val position = displayLines.indexOfFirst { it.index == focusedLine }
+            if (position >= 0) listState.animateScrollToItem(position)
+        }
+    }
 
     // drag and drop listener
     val dragAndDropTarget = remember {
@@ -283,10 +292,11 @@ private fun LogRow(
             .background(bgColor)
             .then(if (hasBorder) Modifier.border(1.dp, AppColors.lineFocusBorder) else Modifier)
             .pointerInput(logLine.index) {
+                var ctrlDown = false
                 coroutineScope {
                     launch {
                         detectTapGestures(
-                            onTap = { onTap() },
+                            onTap = { if (!ctrlDown) onTap() },
                             onDoubleTap = { onDoubleTap() }
                         )
                     }
@@ -294,11 +304,12 @@ private fun LogRow(
                         awaitPointerEventScope {
                             while (true) {
                                 val event = awaitPointerEvent()
-                                if (event.type == PointerEventType.Press && event.keyboardModifiers.isCtrlPressed) {
-                                    event.changes.forEach {
-                                        it.consume()
+                                if (event.type == PointerEventType.Press) {
+                                    ctrlDown = event.keyboardModifiers.isCtrlPressed
+                                    if (ctrlDown) {
+                                        event.changes.forEach { it.consume() }
+                                        onCtrlTap()
                                     }
-                                    onCtrlTap()
                                 }
                             }
                         }
