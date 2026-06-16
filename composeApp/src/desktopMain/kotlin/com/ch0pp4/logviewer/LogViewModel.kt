@@ -272,7 +272,9 @@ class LogViewModel(
 
     fun toggleSelectedLine(index: Int) {
         _selectedLines.update { current ->
-            if (index in current) current - index else current + index
+            val previousFocus = _focusedLine.value
+            val base = if (previousFocus != null && previousFocus != index) current + previousFocus else current
+            if (index in base) base - index else base + index
         }
         _focusedLine.value = index
     }
