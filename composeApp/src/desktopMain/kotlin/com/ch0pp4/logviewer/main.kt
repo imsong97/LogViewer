@@ -63,7 +63,6 @@ fun main() = application {
         val isLoading by logViewModel.isLoading.collectAsState()
         val showUnsupportedDialog by logViewModel.showUnSupportedDialog.collectAsState()
         val buildInfo by logViewModel.buildInfo.collectAsState()
-        val availableTags by logViewModel.availableTags.collectAsState()
 
         MaterialTheme {
             Box(
@@ -82,7 +81,6 @@ fun main() = application {
                         hideUnparsed = hideUnparsed,
                         onSearchQueryChange = { logViewModel.setSearchQuery(it) },
                         onToggleSearchEnabled = { logViewModel.toggleSearchEnabled() },
-                        availableTags = availableTags,
                         onTagQueryChange = { logViewModel.setTagQuery(it) },
                         onToggleTagSearchEnabled = { logViewModel.toggleTagSearchEnabled() },
                         onToggleBookmarks = { logViewModel.toggleShowOnlyBookmarks() },

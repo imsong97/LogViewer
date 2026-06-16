@@ -1,34 +1,20 @@
 package com.ch0pp4.logviewer.ui
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -49,7 +35,6 @@ fun LogFilterLayout(
     tagQuery: String = "",
     tagSearchEnabled: Boolean = true,
     hideUnparsed: Boolean = false,
-    availableTags: List<String> = emptyList(),
     onSearchQueryChange: (String) -> Unit = {},
     onToggleSearchEnabled: () -> Unit = {},
     onTagQueryChange: (String) -> Unit = {},
@@ -59,8 +44,6 @@ fun LogFilterLayout(
     onClearLevelFilters: () -> Unit = {},
     onToggleHideUnparsed: () -> Unit = {},
 ) {
-    var tagDropdownExpanded by remember { mutableStateOf(false) }
-
     val levelD = stringResource(Res.string.common_log_level_d)
     val levelW = stringResource(Res.string.common_log_level_w)
     val levelE = stringResource(Res.string.common_log_level_e)
@@ -121,55 +104,15 @@ fun LogFilterLayout(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(text = stringResource(Res.string.search_tag_label), modifier = Modifier.width(width = 70.dp))
-            Box(modifier = Modifier.weight(weight = 1f).padding(end = 8.dp)) {
-                TextField(
-                    value = tagQuery,
-                    onValueChange = { onTagQueryChange(it) },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth(),
-                    placeholder = { Text(text = stringResource(Res.string.search_tag_placeholder)) },
-                    colors = textFieldColors,
-                    shape = androidx.compose.foundation.shape.RoundedCornerShape(size = 8.dp),
-                    trailingIcon = {
-                        IconButton(
-                            onClick = { tagDropdownExpanded = !tagDropdownExpanded },
-                            enabled = availableTags.isNotEmpty()
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.ArrowDropDown,
-                                contentDescription = stringResource(Res.string.tag_list_description),
-                                tint = AppColors.textFieldText,
-                            )
-                        }
-                    }
-                )
-
-                val lastKeyword = tagQuery.split("|").last().trim()
-                val filteredTags = availableTags.filter {
-                    lastKeyword.isEmpty() || it.contains(lastKeyword, ignoreCase = true)
-                }
-
-                DropdownMenu(
-                    expanded = tagDropdownExpanded && filteredTags.isNotEmpty(),
-                    onDismissRequest = { tagDropdownExpanded = false },
-                ) {
-                    LazyColumn(modifier = Modifier.heightIn(max = 144.dp)) {
-                        items(filteredTags) { tag ->
-                            DropdownMenuItem(
-                                text = { Text(text = tag, fontSize = 12.sp, color = AppColors.textFieldText) },
-                                onClick = {
-                                    val parts = tagQuery.split("|").map { it.trim() }
-                                    val newQuery = (parts.dropLast(1) + tag)
-                                        .filter { it.isNotEmpty() }
-                                        .joinToString(" | ")
-                                    onTagQueryChange(newQuery)
-                                    tagDropdownExpanded = false
-                                }
-                            )
-                        }
-                    }
-                }
-            }
+            TextField(
+                value = tagQuery,
+                onValueChange = { onTagQueryChange(it) },
+                singleLine = true,
+                modifier = Modifier.weight(weight = 1f).padding(end = 8.dp),
+                placeholder = { Text(text = stringResource(Res.string.search_tag_placeholder)) },
+                colors = textFieldColors,
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(size = 8.dp),
+            )
             // tag filter on/off toggle
             FilterChip(
                 selected = tagSearchEnabled,
