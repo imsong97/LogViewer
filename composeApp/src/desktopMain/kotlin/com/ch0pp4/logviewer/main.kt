@@ -52,8 +52,8 @@ fun main() = application {
         onKeyEvent = { event ->
             if (event.type == KeyEventType.KeyUp) {
                 when (event.key) {
-                    Key.F1 -> { logViewModel.focusPrevBookmark(displayLines); true }
-                    Key.F2 -> { logViewModel.focusNextBookmark(displayLines); true }
+                    Key.F2 -> { logViewModel.focusPrevBookmark(displayLines); true }
+                    Key.F3 -> { logViewModel.focusNextBookmark(displayLines); true }
                     else -> false
                 }
             } else false

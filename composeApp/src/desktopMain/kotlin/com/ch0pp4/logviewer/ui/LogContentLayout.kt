@@ -90,11 +90,14 @@ fun LogContentLayout(
     val listState = rememberLazyListState()
     val focusRequester = remember { FocusRequester() }
 
-    // F1, F2 시 라인 스크롤
+    // F2, F3 시 라인 스크롤
     LaunchedEffect(focusedLine) {
         if (focusedLine != null) {
             val position = displayLines.indexOfFirst { it.index == focusedLine }
-            if (position >= 0) listState.animateScrollToItem(position)
+            if (position < 0) return@LaunchedEffect
+
+            val isVisible = listState.layoutInfo.visibleItemsInfo.any { it.index == position }
+            if (!isVisible) listState.animateScrollToItem(position)
         }
     }
 
