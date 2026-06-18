@@ -18,6 +18,7 @@ internal actual val Res.allDrawableResources: Map<String, DrawableResource> by l
 
 internal actual val Res.allStringResources: Map<String, StringResource> by lazy {
   val map = mutableMapOf<String, StringResource>()
+  _collectDesktopMainString0Resources(map)
   return@lazy map
 }
 
